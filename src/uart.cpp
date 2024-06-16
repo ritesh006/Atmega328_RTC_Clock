@@ -19,9 +19,6 @@ void uart_transmit(unsigned char data) {
 
     // Put data into the buffer, sends the data
     UDR0 = data;
-    // Transmit newline characters (\r\n) after the data
-    uart_transmit('\r');
-    uart_transmit('\n');
 }
 
 void uart_transmit_string(const char *str) {
