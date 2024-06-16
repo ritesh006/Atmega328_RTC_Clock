@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-
+#include "uart.h"
 
 // pins SDA => A5
 // pins SCL => A4
@@ -8,10 +8,11 @@
 //      GND
 
 // Define constants for DS3231 RTC
-const unsigned char RTC_ADDRESS = 0x68;   // Address of the RTC module
-const unsigned char SEC_REGISTER = 0x00;  // Register for seconds
-const unsigned char MIN_REGISTER = 0x01;  // Register for minutes
-const unsigned char HOUR_REGISTER = 0x02; // Register for hours
+const uint8_t ONE_BYTE_DATA = 1;
+const uint8_t RTC_ADDRESS = 0x68;   // Address of the RTC module
+const uint8_t SEC_REGISTER = 0x00;  // Register for seconds
+const uint8_t MIN_REGISTER = 0x01;  // Register for minutes
+const uint8_t HOUR_REGISTER = 0x02; // Register for hours
 
 // Initial values for time
 unsigned char sec = 47;  // Seconds (0-59)
