@@ -1,6 +1,10 @@
-# ArduinoIDE_clock_Withou_RTC_lib
+# Atmega328_RTC_Clock
 
 This Arduino project demonstrates how to create a simple clock using an Arduino board without using an RTC (Real-Time Clock) library. Instead, it utilizes the Arduino's internal `millis()` function for timekeeping.
+
+## Used lib
+#include <Arduino.h>
+#include <Wire.h>
 
 pins SDA => A5
 pins SCL => A4
@@ -14,7 +18,7 @@ This sketch implements a basic clock that displays the current time on the Seria
 
 ### Prerequisites
 
-- Arduino IDE installed on your computer.
+- VS code with platform.io IDE installed on your computer.
 
 - Arduino board (e.g., Arduino Uno, Arduino Nano).
 
@@ -26,7 +30,7 @@ This sketch implements a basic clock that displays the current time on the Seria
 
    ```bash
 
-   git clone https://github.com/ritesh006/ArduinoIDE_clock_Withou_RTC_lib.git
+   git clone https://github.com/ritesh006/Atmega328_RTC_Clock.git
 1.  Open the Arduino IDE.
 2.  Navigate to File -> Open and select the `ArduinoIDE_clock_Withou_RTC_lib.ino` file from the cloned repository.
 3.  Connect your Arduino board to your computer using a USB cable.
