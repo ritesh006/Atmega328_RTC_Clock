@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-
+#include "uart.h"
 
 // pins SDA => A5
 // pins SCL => A4
@@ -8,10 +8,11 @@
 //      GND
 
 // Define constants for DS3231 RTC
-const unsigned char RTC_ADDRESS = 0x68;   // Address of the RTC module
-const unsigned char SEC_REGISTER = 0x00;  // Register for seconds
-const unsigned char MIN_REGISTER = 0x01;  // Register for minutes
-const unsigned char HOUR_REGISTER = 0x02; // Register for hours
+const uint8_t ONE_BYTE_DATA = 1;
+const uint8_t RTC_ADDRESS = 0x68;   // Address of the RTC module
+const uint8_t SEC_REGISTER = 0x00;  // Register for seconds
+const uint8_t MIN_REGISTER = 0x01;  // Register for minutes
+const uint8_t HOUR_REGISTER = 0x02; // Register for hours
 
 // Initial values for time
 unsigned char sec = 47;  // Seconds (0-59)
@@ -70,7 +71,7 @@ void loop() {
   Wire.beginTransmission(RTC_ADDRESS);  // Begin sending data to RTC
   Wire.write(SEC_REGISTER);             // Specify the register for seconds
   Wire.endTransmission();               // End data transmission
-  Wire.requestFrom(RTC_ADDRESS, 1);     // Request 1 byte of data from RTC
+  Wire.requestFrom(RTC_ADDRESS, ONE_BYTE_DATA);     // Request 1 byte of data from RTC
   if (Wire.available()) {
     sec = bcdToDec(Wire.read() & 0x7F); // (and many other RTC modules) use a control bit called the CH (Clock Halt) bit. 
     // thats why used bit masking like rtc module DS1307
@@ -80,7 +81,7 @@ void loop() {
   Wire.beginTransmission(RTC_ADDRESS);  // Begin sending data to RTC
   Wire.write(MIN_REGISTER);             // Specify the register for minutes
   Wire.endTransmission();               // End data transmission
-  Wire.requestFrom(RTC_ADDRESS, 1);     // Request 1 byte of data from RTC
+  Wire.requestFrom(RTC_ADDRESS, ONE_BYTE_DATA);     // Request 1 byte of data from RTC
   if (Wire.available()) {
     min = bcdToDec(Wire.read());        // Read and convert minutes from BCD to decimal
   }
@@ -89,7 +90,7 @@ void loop() {
   Wire.beginTransmission(RTC_ADDRESS);  // Begin sending data to RTC
   Wire.write(HOUR_REGISTER);            // Specify the register for hours
   Wire.endTransmission();               // End data transmission
-  Wire.requestFrom(RTC_ADDRESS, 1);     // Request 1 byte of data from RTC
+  Wire.requestFrom(RTC_ADDRESS, ONE_BYTE_DATA);     // Request 1 byte of data from RTC
   if (Wire.available()) {
     unsigned char rawHour = Wire.read();         // Read raw hour data
     hour = bcdToDec(rawHour & 0x1F);    // Extract and convert hours from BCD to decimal (mask out AM/PM bit)
