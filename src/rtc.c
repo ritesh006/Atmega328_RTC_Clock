@@ -22,13 +22,13 @@ void RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds) {
 
 void RTC_GetTime(uint8_t *hours, uint8_t *minutes, uint8_t *seconds,
                  uint8_t *isPM) {
-  // uint8_t rawHours;
+  uint8_t rawHours;
 
-  // *seconds = bcdToDec(I2C_ReadData(RTC_ADDRESS, SEC_REGISTER) & 0x7F);
-  // *minutes = bcdToDec(I2C_ReadData(RTC_ADDRESS, MIN_REGISTER) & 0x7F);
-  // rawHours = I2C_ReadData(RTC_ADDRESS, HOUR_REGISTER);
+  *seconds = bcdToDec(I2C_ReadData(RTC_ADDRESS, SEC_REGISTER) & 0x7F);
+  *minutes = bcdToDec(I2C_ReadData(RTC_ADDRESS, MIN_REGISTER) & 0x7F);
+  rawHours = I2C_ReadData(RTC_ADDRESS, HOUR_REGISTER);
 
-  // *isPM = (rawHours & (1 << 5)) ? 1 : 0; // Check if it's PM
-  // *hours = bcdToDec(rawHours &
-  //                   0x1F); // Extract and convert hours from BCD to decimal
+  *isPM = (rawHours & (1 << 5)) ? 1 : 0; // Check if it's PM
+  *hours = bcdToDec(rawHours &
+                    0x1F); // Extract and convert hours from BCD to decimal
 }
