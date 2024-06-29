@@ -5,10 +5,10 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-int main(void)
-{
-  uint8_t hours, minutes, seconds, isPM;
+int main(void) {
 
+  uint8_t hours, minutes, seconds, isPM;
+  // set_port_output();
   // Initialize RTC and UART
   RTC_Init();
   uart_init();
@@ -24,7 +24,7 @@ int main(void)
 
     // Display time over UART
     display_time(hours, minutes, seconds, isPM);
-
+    
     // Delay for 1 second
     _delay_ms(1000);
   }

@@ -46,8 +46,7 @@ uint8_t I2C_ReadNack(void) {
   return TWDR; // Return received data
 }
 
-void I2C_WriteData(uint8_t deviceAddress, uint8_t registerAddress,
-                   uint8_t data) {
+void I2C_WriteData(uint8_t deviceAddress, uint8_t registerAddress,uint8_t data) {
   I2C_Start();
   I2C_Write(deviceAddress
             << 1); // Write address of the I2C device with the write bit (0)
