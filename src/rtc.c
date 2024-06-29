@@ -13,6 +13,7 @@ void RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds) {
   if (hours >= 12)
     bcdHours |= (1 << 5); // Set bit 5 for PM
 
+
   I2C_WriteData(RTC_ADDRESS, SEC_REGISTER, decToBcd(seconds)); // Set initial seconds
   I2C_WriteData(RTC_ADDRESS, MIN_REGISTER, decToBcd(minutes)); // Set initial minutes
   I2C_WriteData(RTC_ADDRESS, HOUR_REGISTER, bcdHours); // Set initial hour
