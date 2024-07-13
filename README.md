@@ -1,62 +1,57 @@
-# Atmega328_RTC_Clock
+# ATmega328 RTC Clock Project
 
-This Arduino project demonstrates how to create a simple clock using an Arduino board without using an RTC (Real-Time Clock) library. Instead, it utilizes the Arduino's internal `millis()` function for timekeeping.
+This project demonstrates how to create a simple clock using an ATmega328 microcontroller interfaced with RTC modules DS1307 and DS3231. 
+The project does not rely on any Arduino libraries, but rather includes custom implementations for I2C and UART communication.
 
-## Used lib
-#include <Arduino.h>
-#include <Wire.h>
+## Features
 
-pins SDA => A5
-pins SCL => A4
-     VCC
-     GND
-## Overview
+- Real-time clock functionality with DS1307 and DS3231 RTC modules
+- Custom I2C and UART libraries for efficient communication
+- Displays the current time over UART
+- Developed for the ATmega328 microcontroller
 
-This sketch implements a basic clock that displays the current time on the Serial Monitor. It uses the Arduino `millis()` function to track elapsed time since the sketch started, which allows it to maintain timekeeping functionality without an external RTC module.
+## Components Used
 
-## Getting Started
+- ATmega328 microcontroller
+- DS1307 or DS3231 RTC module
+- Arduino IDE or VS Code with PlatformIO
 
-### Prerequisites
+## Hardware Setup
 
-- VS code with platform.io IDE installed on your computer.
+### RTC Module Connection:
 
-- Arduino board (e.g., Arduino Uno, Arduino Nano).
+- Connect the SDA pin of the RTC module to A4 on the Arduino.
+- Connect the SCL pin of the RTC module to A5 on the Arduino.
+- Connect VCC and GND pins to the appropriate power and ground pins.
 
-- USB cable for connecting Arduino to your computer.
+## Software Setup
+### Clone the Repository:
 
-### Installing and Running
+```bash
+git clone https://github.com/ritesh006/Atmega328_RTC_Clock.git
 
-1\. **Clone or download the repository to your local machine:**
+### Open the Project:
 
-   ```bash
+Open the project in VS Code with PlatformIO or Arduino IDE.
 
-   git clone https://github.com/ritesh006/Atmega328_RTC_Clock.git
-1.  Open the Arduino IDE.
-2.  Navigate to File -> Open and select the `ArduinoIDE_clock_Withou_RTC_lib.ino` file from the cloned repository.
-3.  Connect your Arduino board to your computer using a USB cable.
-4.  Upload the sketch to your Arduino board (Sketch -> Upload).
-5.  Open the Serial Monitor (Tools -> Serial Monitor). Ensure the baud rate is set to 9600 to view the clock output.
+### Upload the Code:
 
-Usage
------
+1. Select the appropriate board and COM port.
+2. Upload the code to the Arduino.
 
--   The clock starts running as soon as the sketch is uploaded to the Arduino board.
--   The Serial Monitor displays the current time in hours, minutes, and seconds.
--   Time increments every second.
+### Monitor Output:
 
-Code Explanation
-----------------
+Open the Serial Monitor at a baud rate of 9600 to view the current time.
 
--   `setup()`: Initializes Serial communication and sets up initial parameters.
--   `loop()`: Continuously updates and displays the current time using the `millis()` function.
--   The sketch calculates hours, minutes, and seconds based on the elapsed time since the sketch started.
+## Custom Libraries
 
-Contributing
-------------
+- **I2C Library**: Handles communication with the RTC modules, including initialization, read, and write operations.
+- **UART Library**: Manages serial communication, including initialization, data transmission, and reception.
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or create a pull request.
+## Contributing
 
-License
--------
+Contributions are welcome! Please open an issue or create a pull request for any improvements or suggestions.
+
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
