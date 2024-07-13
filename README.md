@@ -29,7 +29,7 @@ The project does not rely on any Arduino libraries, but rather includes custom i
 
 ```bash
 git clone https://github.com/ritesh006/Atmega328_RTC_Clock.git
-```bash
+```
 
 ### Open the Project:
 
