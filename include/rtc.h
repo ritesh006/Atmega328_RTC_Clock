@@ -3,13 +3,25 @@
 
 #include <stdint.h>
 
-#define RTC_ADDRESS 0x68
-#define SEC_REGISTER 0x00
-#define MIN_REGISTER 0x01
-#define HOUR_REGISTER 0x02
+typedef struct {
+  uint8_t hour;   /* 0-23 */
+  uint8_t minute; /* 0-59 */
+  uint8_t second; /* 0-59 */
+} RtcTime;
 
-void RTC_Init(void);
-void RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds);
-void RTC_GetTime(uint8_t *hours, uint8_t *minutes, uint8_t *seconds, uint8_t *isPM);
+typedef enum {
+  RTC_OK = 0,
+  RTC_ERROR_I2C,
+  RTC_ERROR_CLOCK_STOPPED,
+  RTC_ERROR_INVALID_TIME,
+  RTC_ERROR_ARGUMENT
+} RtcStatus;
 
-#endif // RTC_H
+/* Initializes the I2C peripheral and checks that the RTC contains valid time.
+ * It never changes the time stored in the RTC.
+ */
+RtcStatus RTC_Init(void);
+RtcStatus RTC_SetTime(uint8_t hour, uint8_t minute, uint8_t second);
+RtcStatus RTC_GetTime(RtcTime *time);
+
+#endif

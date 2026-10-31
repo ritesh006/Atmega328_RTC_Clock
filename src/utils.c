@@ -1,28 +1,19 @@
 #include "utils.h"
-#include "uart.h" // Assuming uart.h defines uart_transmit_string and uart_transmit_number
+#include "uart.h"
 
-// utils.c
+static void transmit_two_digits(uint8_t value) {
+  if (value < 10) {
+    uart_transmit('0');
+  }
+  uart_transmit_number(value);
+}
 
-#include "utils.h"
-
-uint8_t decToBcd(uint8_t val) { return ((val / 10) << 4) | (val % 10); }
-
-uint8_t bcdToDec(uint8_t val) { return ((val >> 4) * 10) + (val & 0x0F); }
-
-
-void display_time(uint8_t hour, uint8_t min, uint8_t sec, uint8_t isPM) {
+void display_time(uint8_t hour, uint8_t minute, uint8_t second) {
   uart_transmit_string("Time: ");
-  uart_transmit_number(hour); // Transmit formatted hours
+  transmit_two_digits(hour);
   uart_transmit(':');
-  if (min < 10) {
-    uart_transmit('0'); // Add '0' before single digit minutes
-  }
-  uart_transmit_number(min); // Transmit formatted minutes
+  transmit_two_digits(minute);
   uart_transmit(':');
-  if (sec < 10) {
-    uart_transmit('0'); // Add '0' before single digit seconds
-  }
-  uart_transmit_number(sec); // Transmit formatted seconds
-  uart_transmit_string(isPM ? " PM" : " AM");
-  uart_transmit('\n'); // Move to the next line
+  transmit_two_digits(second);
+  uart_transmit_string("\r\n");
 }

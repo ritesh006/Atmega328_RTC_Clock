@@ -1,31 +1,57 @@
 #include "rtc.h"
 #include "i2c.h"
-#include "utils.h"
+#include "time_utils.h"
 
+#define RTC_ADDRESS 0x68
+#define RTC_SECONDS_REGISTER 0x00
 
-void RTC_Init(void) {
-  I2C_Init(); // Start the communication with RTC
+RtcStatus RTC_GetTime(RtcTime *time) {
+  if (time == 0) {
+    return RTC_ERROR_ARGUMENT;
+  }
+
+  uint8_t registers[3];
+  if (!I2C_ReadRegisters(RTC_ADDRESS, RTC_SECONDS_REGISTER,
+                         registers, sizeof(registers))) {
+    return RTC_ERROR_I2C;
+  }
+
+  /* On DS1307 bit 7 is CH (clock halt). DS3231 reads it as zero. */
+  if ((registers[0] & 0x80) != 0) {
+    return RTC_ERROR_CLOCK_STOPPED;
+  }
+
+  RtcTime decoded;
+  if (!rtc_bcd_decode((uint8_t)(registers[0] & 0x7F), 59,
+                      &decoded.second) ||
+      !rtc_bcd_decode((uint8_t)(registers[1] & 0x7F), 59,
+                      &decoded.minute) ||
+      !rtc_hour_decode(registers[2], &decoded.hour)) {
+    return RTC_ERROR_INVALID_TIME;
+  }
+
+  *time = decoded;
+  return RTC_OK;
 }
 
-void RTC_SetTime(uint8_t hours, uint8_t minutes, uint8_t seconds) {
-  uint8_t bcdHours = decToBcd(hours);
-  bcdHours |= (1 << 6); // Set bit 6 for 12-hour mode (AM/PM)
-  if (hours >= 12)
-    bcdHours |= (1 << 5); // Set bit 5 for PM
+RtcStatus RTC_SetTime(uint8_t hour, uint8_t minute, uint8_t second) {
+  uint8_t registers[3];
+  if (!rtc_bcd_encode(second, 59, &registers[0]) ||
+      !rtc_bcd_encode(minute, 59, &registers[1]) ||
+      !rtc_bcd_encode(hour, 23, &registers[2])) {
+    return RTC_ERROR_INVALID_TIME;
+  }
 
-
-  I2C_WriteData(RTC_ADDRESS, SEC_REGISTER, decToBcd(seconds)); // Set initial seconds
-  I2C_WriteData(RTC_ADDRESS, MIN_REGISTER, decToBcd(minutes)); // Set initial minutes
-  I2C_WriteData(RTC_ADDRESS, HOUR_REGISTER, bcdHours); // Set initial hour
+  /* Write in 24-hour mode. Writing seconds also clears the DS1307 CH bit. */
+  return I2C_WriteRegisters(RTC_ADDRESS, RTC_SECONDS_REGISTER,
+                            registers, sizeof(registers))
+             ? RTC_OK
+             : RTC_ERROR_I2C;
 }
 
-void RTC_GetTime(uint8_t *hours, uint8_t *minutes, uint8_t *seconds, uint8_t *isPM) {
-  uint8_t rawHours;
+RtcStatus RTC_Init(void) {
+  I2C_Init();
 
-  *seconds = bcdToDec(I2C_ReadData(RTC_ADDRESS, SEC_REGISTER) & 0x7F);
-  *minutes = bcdToDec(I2C_ReadData(RTC_ADDRESS, MIN_REGISTER) & 0x7F);
-  rawHours = I2C_ReadData(RTC_ADDRESS, HOUR_REGISTER);
-
-  *isPM = (rawHours & (1 << 5)) ? 1 : 0; // Check if it's PM
-  *hours = bcdToDec(rawHours &0x1F); // Extract and convert hours from BCD to decimal
+  RtcTime current;
+  return RTC_GetTime(&current);
 }
